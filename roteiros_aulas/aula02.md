@@ -11,6 +11,6 @@
     import 'bootstrap/dist/css/bootstrap.min.css';
     ```
   - Utilizar algum componente do React;
-- Como adicionar uma nova tarefa?
+- Como adicionar uma nova tarefa? (states)
 - Criação de um formulário de adição da nova tarefa;
 - Separar este componente em uma nova página (react-router).

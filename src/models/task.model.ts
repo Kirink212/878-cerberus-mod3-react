@@ -3,4 +3,5 @@ export default interface Task {
     title: string;
     status: boolean;
     dueDate: Date;
+    description?: string;
 }
