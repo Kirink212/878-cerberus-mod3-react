@@ -1,7 +1,11 @@
 export default interface Task {
+    // Attributes
     id: number;
     title: string;
     status: boolean;
     dueDate: Date;
-    description?: string;
+    description?: string
+
+    // Methods
+    changeStatus?: (id: number) => void
 }

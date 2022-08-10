@@ -1,70 +1,89 @@
-import { useState } from 'react';
-import { Accordion, Button } from 'react-bootstrap';
+import { useState } from "react";
+import { Accordion } from "react-bootstrap";
 
-import Task from '../../models/task.model';
-import TaskDetails from './TaskDetails';
+import Task from "../../models/task.model";
+import TaskDetails from "../TaskDetails";
+import TaskForm from "../TaskForm";
 
 function TaskList() {
     const [tasksList, setTasksList] = useState<Array<Task>>([
+      {
+        id: 1,
+        title: "passear com o chorro",
+        status: false,
+        dueDate: new Date(2022, 8, 4),
+        description: 'ir com ele até a padaria e voltar'
+      },
+      {
+        id: 2,
+        title: "limpar a casa",
+        status: false,
+        dueDate: new Date(2022, 8, 4),
+      },
+    ])
+
+  function createNewTask( 
+    title: string, 
+    dueDate: Date, 
+    description: string 
+    ): void {
+
+    const lastId = tasksList[tasksList.length - 1].id
+
+    setTasksList([...tasksList, {
+      id: lastId + 1,
+      title,
+      status: false,
+      dueDate,
+      description
+    }])
+
+  }
+
+  function changeStatus(id: number){
+      const index = tasksList.findIndex((task) => task.id === id)
+
+      tasksList[index].status = !tasksList[index].status
+
+      setTasksList(tasksList)
+  }
+
+  function editTask(
+    id: number,
+    title: string, dueDate:
+    Date, description: string){
+
+    const index = tasksList.findIndex((task) => task.id === id)
+
+    tasksList[index] = {
+      id,
+      title,
+      status: tasksList[index].status,
+      dueDate,
+      description
+    }
+
+    setTasksList(tasksList)
+  }
+
+  return (
+    <>
+      <TaskForm 
+        {...{inputTask: createNewTask}}
+      />
+      <Accordion>
         {
-            id: 1,
-            title: "Passear com o cachorro",
-            status: false,
-            dueDate: new Date(2022, 8, 4)
-        },
-        {
-            id: 2,
-            title: "Limpar casa",
-            status: false,
-            dueDate: new Date(2022, 8, 4)
-        },
-        {
-            id: 3,
-            title: "Fazer o exerício que o Luís passou",
-            status: false,
-            dueDate: new Date(2022, 8, 4)
+          tasksList.map((task: Task) => 
+            <TaskDetails 
+              key={task.id}
+              {...task}
+              changeStatus={changeStatus} 
+            />
+          )
         }
-    ]);
-
-    function createNewTask() {
-        const lastId = tasksList[tasksList.length - 1].id;
-        console.log("Entrei aqui");
-
-        // Este push não funfa!!!
-        // tasksList.push({
-        //     id: lastId + 1,
-        //     title: "Tarefa teste",
-        //     status: false,
-        //     dueDate: new Date(2022, 8, 4)
-        // });
-        setTasksList([...tasksList, {
-            id: lastId + 1,
-            title: "Tarefa teste",
-            status: false,
-            dueDate: new Date(2022, 8, 4)
-        }]);
-    }
-
-    function changeStatus(id: number) {
-        const index = tasksList.findIndex((task) => task.id == id);
-
-        tasksList[index].status = !tasksList[index].status;
-
-        setTasksList(tasksList);
-    }
-
-    return <>
-        <Accordion>
-            {
-                tasksList.map((task: Task) => <TaskDetails key={task.id} {...task} />)
-                // [
-                //   <li>Tarefa1</li>,
-                //   <li>Tarefa2</li>,
-                //   <li>Tarefa3</li>
-                // ]
-            }
-        </Accordion>
+      </Accordion>
     </>
+  );
 }
 
 export default TaskList;
