@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Task from '../../models/task.model';
 import TaskForm from '../TaskForm';
 
 interface HandleModal {
-
     handleClose: () => void
     show: boolean
     task: Task
 }
 
-function TaskModal({ handleClose, show, task }: HandleModal) {
-
-    function editTask(){
-
-        console.log("Entrou no editTask")
-    }
+function TaskModal({ show, task, handleClose } : HandleModal) {
 
   return (
     <>
@@ -28,16 +21,18 @@ function TaskModal({ handleClose, show, task }: HandleModal) {
         </Modal.Header>
         <Modal.Body>
             <TaskForm
-                inputTask = { editTask }
+              inputTask = { task.editTask }
+              isEdit = { true }
+              task = { task }
             />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          {/* <Button variant="primary" onClick={saveEdit}>
             Salvar
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
     </>

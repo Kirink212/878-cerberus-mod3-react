@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Accordion } from "react-bootstrap";
+import TaskContext from "../../contexts/task.context";
 
 import Task from "../../models/task.model";
 import TaskDetails from "../TaskDetails";
@@ -10,7 +11,7 @@ function TaskList() {
       {
         id: 1,
         title: "passear com o chorro",
-        status: false,
+        status: true,
         dueDate: new Date(2022, 8, 4),
         description: 'ir com ele até a padaria e voltar'
       },
@@ -41,48 +42,51 @@ function TaskList() {
   }
 
   function changeStatus(id: number){
-      const index = tasksList.findIndex((task) => task.id === id)
+    const index = tasksList.findIndex((task) => task.id === id);
 
-      tasksList[index].status = !tasksList[index].status
+    tasksList[index].status = !tasksList[index].status;
 
-      setTasksList(tasksList)
+    setTasksList([...tasksList]);
   }
 
-  function editTask(
-    id: number,
-    title: string, dueDate:
-    Date, description: string){
-
+  function editTask(title: string, dueDate: Date, description: string, id?: number) {
     const index = tasksList.findIndex((task) => task.id === id)
 
-    tasksList[index] = {
-      id,
-      title,
-      status: tasksList[index].status,
-      dueDate,
-      description
-    }
+    console.log(tasksList);
+    // tasksList[index] = {
+    //   id: tasksList[index].id,
+    //   title,
+    //   status: tasksList[index].status,
+    //   dueDate,
+    //   description
+    // }
+    tasksList[index].title = title;
+    tasksList[index].dueDate = dueDate;
+    tasksList[index].description = description;
+    console.log(tasksList);
 
-    setTasksList(tasksList)
+    setTasksList([...tasksList]);
   }
 
   return (
-    <>
+    <TaskContext.Provider value={ {task, createNewTask, editTask, changeStatus} }>
       <TaskForm 
         {...{inputTask: createNewTask}}
       />
+
       <Accordion>
         {
           tasksList.map((task: Task) => 
             <TaskDetails 
               key={task.id}
               {...task}
-              changeStatus={changeStatus} 
+              changeStatus={changeStatus}
+              editTask={editTask}
             />
           )
         }
       </Accordion>
-    </>
+    </TaskContext.Provider>
   );
 }
 

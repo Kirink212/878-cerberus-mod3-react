@@ -21,6 +21,7 @@ function TaskDetails(task: Task) {
                 <Form.Check
                 type="checkbox"
                 label={task.title}
+                checked={task.status}
                 onChange={changeCheckbox}
                 />
             </Accordion.Header>
@@ -33,9 +34,17 @@ function TaskDetails(task: Task) {
             </Accordion.Body>
             </Accordion.Item>
             <TaskModal 
-                show = { show }
-                handleClose = {  handleClose }
-                task = {  task }
+                // show = { show }
+                // handleClose = { handleClose }
+                // task = { task }
+                {
+                    ...{
+                        show,
+                        handleClose,
+                        task
+                    }
+                }
+                // abc = { "abc" } -> não posso fazer isso, pois não é compatível com a tipagem definida
             />
         </>
     )

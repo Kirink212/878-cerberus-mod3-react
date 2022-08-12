@@ -7,5 +7,6 @@ export default interface Task {
     description?: string
 
     // Methods
-    changeStatus?: (id: number) => void
+    changeStatus?: (id: number) => void;
+    editTask?: (title: string, dueDate: Date, description: string, id?: number) => void;
 }
