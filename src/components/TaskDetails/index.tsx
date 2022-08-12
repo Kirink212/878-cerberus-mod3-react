@@ -1,19 +1,16 @@
 import Task from "../../models/task.model";
 import Accordion from "react-bootstrap/Accordion";
 import { Button, Form } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TaskModal from "../TaskModal";
+import { TaskContext } from "../../contexts/task.context";
 
 function TaskDetails(task: Task) {
   const [show, setShow] = useState(false);
+  const { changeStatus } = useContext(TaskContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  function changeCheckbox(): void {
-    const id = task.id;
-    task.changeStatus?.(id);
-  }
 
     return ( <>
             <Accordion.Item eventKey={task.id.toString()}>
@@ -22,7 +19,7 @@ function TaskDetails(task: Task) {
                 type="checkbox"
                 label={task.title}
                 checked={task.status}
-                onChange={changeCheckbox}
+                onChange={() => changeStatus?.(task.id)}
                 />
             </Accordion.Header>
             <Accordion.Body>

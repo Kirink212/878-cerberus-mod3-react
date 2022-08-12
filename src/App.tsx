@@ -1,19 +1,9 @@
-import './App.css';
 import TaskList from './components/TaskList';
 
+import './App.css';
 
 function App(){
-
-  
-    return (
-      <>
-        <h1>To-Do List App</h1>
-        <TaskList />
-      </>
-    )
-  
-
-
+  return <TaskList />
 }
 
 export default App;

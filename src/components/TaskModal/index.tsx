@@ -21,7 +21,6 @@ function TaskModal({ show, task, handleClose } : HandleModal) {
         </Modal.Header>
         <Modal.Body>
             <TaskForm
-              inputTask = { task.editTask }
               isEdit = { true }
               task = { task }
             />

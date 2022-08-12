@@ -1,16 +1,15 @@
 import { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import TaskContext from "../../contexts/task.context";
+import { TaskContext } from "../../contexts/task.context";
 import Task from "../../models/task.model";
 import { convertDateToFormat } from "../../utils/date";
 
 interface TaskFormProps {
     isEdit?: boolean;
     task?: Task;
-    inputTask?: (title: string, dueDate: Date, description: string, id?: number) => void; // botei ? aqui
 }
 
-function TaskForm( { task, inputTask, isEdit = false }: TaskFormProps) {
+function TaskForm( { task, isEdit = false }: TaskFormProps) {
 
     const [title, setTitle] = useState<string>(task?.title || '');
     const [description, setDescription] = useState<string>(task?.description?? '');
@@ -21,9 +20,9 @@ function TaskForm( { task, inputTask, isEdit = false }: TaskFormProps) {
         const formatDueDate: Date = new Date(dueDate.replaceAll('-', ','));
 
         if (isEdit)
-            inputTask?.( title, formatDueDate, description, task?.id );
+            editTask?.( title, formatDueDate, description, task?.id );
         else {
-            inputTask?.( title, formatDueDate, description );
+            createNewTask?.( title, formatDueDate, description );
             clearForm();
         }
     }
@@ -34,8 +33,8 @@ function TaskForm( { task, inputTask, isEdit = false }: TaskFormProps) {
         setDueDate('')
     }
 
-
-    return (
+    return <>
+        { !isEdit && <h1>Create New Task</h1> }
         <Form>
             <Form.Group className="mb-3" controlId="formBasicTitle">
                 <Form.Label>Título</Form.Label>
@@ -69,7 +68,7 @@ function TaskForm( { task, inputTask, isEdit = false }: TaskFormProps) {
             {/* { !isEdit && <Button onClick={ submitForm }>Adicionar Tarefa</Button> } */}
             <Button onClick={ submitForm }> { isEdit? "Editar": "Adicionar" } Tarefa </Button>
         </Form>
-    )
+    </>
 
 }
 
