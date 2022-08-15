@@ -16,6 +16,8 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
     const [dueDate, setDueDate] = useState<string>(convertDateToFormat(task?.dueDate)?? '');
     const { createNewTask, editTask } = useContext(TaskContext);
 
+    // console.log("entrei aqui: TaskForm");
+
     function submitForm(){
         const formatDueDate: Date = new Date(dueDate.replaceAll('-', ','));
 

@@ -10,39 +10,55 @@ interface TaskContextProps {
     changeStatus?: (id: number) => void;
     editTask?: (title: string, dueDate: Date, description: string, id?: number) => void;
     createNewTask?: (title: string, dueDate: Date, description: string) => void;
+    removeTask?: (id?: number) => void;
 }
 
 export const TaskContext = createContext<TaskContextProps>({});
 
 export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Element } ) {
-    const [tasksList, setTasksList] = useState<Array<Task>>([
-        {
-            id: 1,
-            title: "passear com o chorro",
-            status: true,
-            dueDate: new Date(2022, 8, 4),
-            description: 'ir com ele até a padaria e voltar'
-        },
-        {
-            id: 2,
-            title: "limpar a casa",
-            status: false,
-            dueDate: new Date(2022, 8, 4),
-        },
-    ])
+    const [tasksList, setTasksList] = useState<Array<Task>>(() => {
+      const persistentList = localStorage.getItem("tasksList")?? "";
+      const parsedList = JSON.parse(persistentList);
+
+      for(let i=0; i< parsedList.length; i++) {
+        parsedList[i].dueDate = new Date(parsedList[i].dueDate);
+      }
+
+      return parsedList?? [
+          {
+              id: 1,
+              title: "passear com o chorro",
+              status: true,
+              dueDate: new Date(2022, 8, 4),
+              description: 'ir com ele até a padaria e voltar'
+          },
+          {
+              id: 2,
+              title: "limpar a casa",
+              status: false,
+              dueDate: new Date(2022, 8, 4),
+          },
+      ];
+    });
+
+    function setPersistentTasksList(newTasksList: Task[]) {
+      setTasksList(newTasksList);
+
+      // localStorage.setItem("tasksList", JSON.stringify(newTasksList));
+    }
   
     function createNewTask( title: string, dueDate: Date, description: string ): void {
       const lastId = tasksList[tasksList.length - 1].id;
-  
-      console.log("entrei");
 
-      setTasksList([...tasksList, {
+      setPersistentTasksList([...tasksList, {
         id: lastId + 1,
         title,
         status: false,
         dueDate,
         description
       }]);
+
+
     }
   
     function changeStatus(id: number){
@@ -50,7 +66,7 @@ export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Ele
   
       tasksList[index].status = !tasksList[index].status;
   
-      setTasksList([...tasksList]);
+      setPersistentTasksList([...tasksList]);
     }
   
     function editTask(title: string, dueDate: Date, description: string, id?: number) {
@@ -60,10 +76,20 @@ export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Ele
       tasksList[index].dueDate = dueDate;
       tasksList[index].description = description;
   
-      setTasksList([...tasksList]);
+      setPersistentTasksList([...tasksList]);
+
+
     }
 
-    return <TaskContext.Provider value={ {tasksList, createNewTask, editTask, changeStatus} }>
+    function removeTask(id?: number) {
+      const index = tasksList.findIndex((task) => task.id === id);
+
+      tasksList.splice(index, 1);
+
+      setPersistentTasksList([...tasksList]);
+    }
+
+    return <TaskContext.Provider value={ {tasksList, createNewTask, editTask, changeStatus, removeTask} }>
       {children}
     </TaskContext.Provider>
 }

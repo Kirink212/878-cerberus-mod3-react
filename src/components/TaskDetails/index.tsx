@@ -1,16 +1,25 @@
-import Task from "../../models/task.model";
 import Accordion from "react-bootstrap/Accordion";
 import { Button, Form } from "react-bootstrap";
 import { useContext, useState } from "react";
+
 import TaskModal from "../TaskModal";
+import AreYouSureModal from "../AreYouSureModal";
+
+import Task from "../../models/task.model";
 import { TaskContext } from "../../contexts/task.context";
 
 function TaskDetails(task: Task) {
-  const [show, setShow] = useState(false);
-  const { changeStatus } = useContext(TaskContext);
+    const { changeStatus } = useContext(TaskContext);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    const [showEdit, setShowEdit] = useState(false);
+    const handleCloseEdit = () => setShowEdit(false);
+    const handleShowEdit = () => setShowEdit(true);
+
+    const [showRemove, setShowRemove] = useState(false);
+    const handleCloseRemove = () => setShowRemove(false);
+    const handleShowRemove = () => setShowRemove(true);
+
+    // console.log("entrei aqui: TaskDetails");
 
     return ( <>
             <Accordion.Item eventKey={task.id.toString()}>
@@ -27,22 +36,26 @@ function TaskDetails(task: Task) {
                 <li>{task.dueDate.toLocaleDateString()}</li>
                 <li>{task.description ?? "Empty Description"}</li>
                 </ul>
-                <Button onClick={handleShow}>Editar</Button>
+                <Button onClick={handleShowEdit}>Editar</Button>
+                <Button variant="danger" onClick={handleShowRemove}>Remover</Button>
             </Accordion.Body>
             </Accordion.Item>
             <TaskModal 
-                // show = { show }
-                // handleClose = { handleClose }
-                // task = { task }
                 {
                     ...{
-                        show,
-                        handleClose,
+                        show: showEdit,
+                        handleClose: handleCloseEdit,
                         task
                     }
                 }
                 // abc = { "abc" } -> não posso fazer isso, pois não é compatível com a tipagem definida
             />
+            <AreYouSureModal 
+                show = { showRemove }
+                handleClose = { handleCloseRemove }
+                task = { task }
+            />
+            {/* Criar o componente referente ao modal de deleção (Are you sure?) */}
         </>
     )
 }

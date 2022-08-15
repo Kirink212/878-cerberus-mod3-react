@@ -1,13 +1,9 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Task from '../../models/task.model';
+
 import TaskForm from '../TaskForm';
 
-interface HandleModal {
-    handleClose: () => void
-    show: boolean
-    task: Task
-}
+import HandleModal from '../../models/handleModal.model';
 
 function TaskModal({ show, task, handleClose } : HandleModal) {
 
