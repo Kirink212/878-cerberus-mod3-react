@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { TaskContext } from "../../contexts/task.context";
 import Task from "../../models/task.model";
@@ -11,14 +11,20 @@ interface TaskFormProps {
 
 function TaskForm( { task, isEdit = false }: TaskFormProps) {
 
-    const [title, setTitle] = useState<string>(task?.title || '');
-    const [description, setDescription] = useState<string>(task?.description?? '');
-    const [dueDate, setDueDate] = useState<string>(convertDateToFormat(task?.dueDate)?? '');
+    // const [title, setTitle] = useState<string>(task?.title || '');
+    // const [description, setDescription] = useState<string>(task?.description?? '');
+    // const [dueDate, setDueDate] = useState<string>(convertDateToFormat(task?.dueDate)?? '');
+    const titleRef = useRef(null);
+    const descriptionRef = useRef(null);
+    const dueDateRef = useRef(null);
     const { createNewTask, editTask } = useContext(TaskContext);
 
-    // console.log("entrei aqui: TaskForm");
+    console.log("entrei aqui: TaskForm");
 
     function submitForm(){
+        const title = titleRef.current? titleRef.current.value : "";
+        const description = descriptionRef.current? descriptionRef.current.value : "";
+        const dueDate = dueDateRef.current? dueDateRef.current.value : "";
         const formatDueDate: Date = new Date(dueDate.replaceAll('-', ','));
 
         if (isEdit)
@@ -30,10 +36,21 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
     }
 
     function clearForm(){
-        setTitle('')
-        setDescription('')
-        setDueDate('')
+        if (titleRef.current)
+            titleRef.current.value = "";
+        if (descriptionRef.current)
+            descriptionRef.current.value = "";
+        if (dueDateRef.current)
+            dueDateRef.current.value = "";
+
+        // setTitle('')
+        // setDescription('')
+        // setDueDate('')
     }
+
+    useEffect(() => {
+
+    }, []);
 
     return <>
         { !isEdit && <h1>Create New Task</h1> }
@@ -43,8 +60,9 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
                 <Form.Control
                     type="text"
                     placeholder="Informe o título"
-                    value={title}
-                    onChange={(event) => setTitle(event.target.value)}
+                    ref={titleRef}
+                    // value={title}
+                    // onChange={(event) => setTitle(event.target.value)}
                 />
             </Form.Group>
 
@@ -53,8 +71,9 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
                 <Form.Control
                     type="text"
                     placeholder="Informe a descrição"
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
+                    ref={descriptionRef}
+                    // value={description}
+                    // onChange={(event) => setDescription(event.target.value)}
                 />
             </Form.Group>
 
@@ -62,8 +81,9 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
             <Form.Label>Data</Form.Label>
                 <Form.Control
                     type="date"
-                    value={dueDate}
-                    onChange={(event) => setDueDate(event.target.value)}
+                    ref={dueDateRef}
+                    // value={dueDate}
+                    // onChange={(event) => setDueDate(event.target.value)}
                 />
             </Form.Group>
 

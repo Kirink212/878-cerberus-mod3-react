@@ -17,7 +17,7 @@ export const TaskContext = createContext<TaskContextProps>({});
 
 export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Element } ) {
     const [tasksList, setTasksList] = useState<Array<Task>>(() => {
-      const persistentList = localStorage.getItem("tasksList")?? "";
+      const persistentList = localStorage.getItem("tasksList")?? "[]";
       const parsedList = JSON.parse(persistentList);
 
       for(let i=0; i< parsedList.length; i++) {

@@ -4,8 +4,13 @@ import Modal from 'react-bootstrap/Modal';
 import TaskForm from '../TaskForm';
 
 import HandleModal from '../../models/handleModal.model';
+import { useEffect } from 'react';
 
 function TaskModal({ show, task, handleClose } : HandleModal) {
+  // useEffect(() => {
+  //   console.log("TaskModal montado!");
+  //   return () => console.log("Task Modal desmontado!");
+  // }, []);
 
   return (
     <>
