@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { TaskContext } from "../../contexts/task.context";
 import Task from "../../models/task.model";
@@ -14,16 +14,16 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
     // const [title, setTitle] = useState<string>(task?.title || '');
     // const [description, setDescription] = useState<string>(task?.description?? '');
     // const [dueDate, setDueDate] = useState<string>(convertDateToFormat(task?.dueDate)?? '');
-    const titleRef = useRef(null);
-    const descriptionRef = useRef(null);
-    const dueDateRef = useRef(null);
+    const titleRef = useRef<HTMLInputElement>(null!);
+    const descriptionRef = useRef<HTMLInputElement>(null);
+    const dueDateRef = useRef<HTMLInputElement>(null);
     const { createNewTask, editTask } = useContext(TaskContext);
 
-    console.log("entrei aqui: TaskForm");
+    // console.log("entrei aqui: TaskForm");
 
     function submitForm(){
-        const title = titleRef.current? titleRef.current.value : "";
-        const description = descriptionRef.current? descriptionRef.current.value : "";
+        const title = titleRef.current.value || "";
+        const description = descriptionRef.current?.value || "";
         const dueDate = dueDateRef.current? dueDateRef.current.value : "";
         const formatDueDate: Date = new Date(dueDate.replaceAll('-', ','));
 
@@ -49,7 +49,12 @@ function TaskForm( { task, isEdit = false }: TaskFormProps) {
     }
 
     useEffect(() => {
-
+        // Valores iniciais para os inputs
+        titleRef.current.value = task?.title || '';
+        if (descriptionRef.current)
+            descriptionRef.current.value = task?.description?? '';
+        if (dueDateRef.current)
+            dueDateRef.current.value = convertDateToFormat(task?.dueDate)?? '';
     }, []);
 
     return <>

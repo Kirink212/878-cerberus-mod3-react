@@ -1,5 +1,5 @@
 // import { TaskContext } from './task.context';
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Task from "../models/task.model";
 
 interface TaskContextProps {
@@ -24,7 +24,7 @@ export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Ele
         parsedList[i].dueDate = new Date(parsedList[i].dueDate);
       }
 
-      return parsedList?? [
+      return parsedList.length > 0 ? parsedList : [
           {
               id: 1,
               title: "passear com o chorro",
@@ -40,6 +40,10 @@ export function TaskProvider ( { children }: { children: JSX.Element[] | JSX.Ele
           },
       ];
     });
+
+    // useEffect(() => {
+    //   // Faria a requisição usando fetch
+    // }, []);
 
     function setPersistentTasksList(newTasksList: Task[]) {
       setTasksList(newTasksList);

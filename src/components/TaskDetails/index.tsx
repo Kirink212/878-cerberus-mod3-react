@@ -8,6 +8,9 @@ import AreYouSureModal from "../AreYouSureModal";
 import Task from "../../models/task.model";
 import { TaskContext } from "../../contexts/task.context";
 
+import TaskStatusLabel, { PurpleButton } from "./styles";
+import "./index.css";
+
 function TaskDetails(task: Task) {
     const { changeStatus } = useContext(TaskContext);
 
@@ -25,18 +28,20 @@ function TaskDetails(task: Task) {
             <Accordion.Item eventKey={task.id.toString()}>
             <Accordion.Header>
                 <Form.Check
+                // className={task.status? "task-done" : ""}
                 type="checkbox"
-                label={task.title}
+                // label={task.title}
                 checked={task.status}
                 onChange={() => changeStatus?.(task.id)}
                 />
+                <TaskStatusLabel status={task.status} dueDate={task.dueDate}>{task.title}</TaskStatusLabel>
             </Accordion.Header>
             <Accordion.Body>
                 <ul>
                 <li>{task.dueDate.toLocaleDateString()}</li>
                 <li>{task.description ?? "Empty Description"}</li>
                 </ul>
-                <Button onClick={handleShowEdit}>Editar</Button>
+                <PurpleButton onClick={handleShowEdit}>Editar</PurpleButton>
                 <Button variant="danger" onClick={handleShowRemove}>Remover</Button>
             </Accordion.Body>
             </Accordion.Item>

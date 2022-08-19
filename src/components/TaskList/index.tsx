@@ -30,7 +30,6 @@ function TaskList() {
       //   showMessage = true;
       // }
 
-      console.log(showMessage.current);
       if (showMessage.current && filteredTasks?.length) {
         const message = filteredTasks?.reduce((prev, curr) => prev + `-> ${curr.title}`, "Tarefas que estão atrasadas:\n\n");
         alert(message);
@@ -46,6 +45,15 @@ function TaskList() {
 
   useEffect(() => {
     localStorage.setItem("tasksList", JSON.stringify(tasksList));
+
+    fetch("http://localhost:3000", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tasksList)
+    }).then((obj) => {
+      console.log(obj);
+    });
+
     showMessage.current = true;
   }, [tasksList]);
 
